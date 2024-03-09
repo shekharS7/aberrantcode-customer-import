@@ -1,6 +1,6 @@
 <?php
  
-namespace WoundermanThompson\CustomerImport\Model;
+namespace WundermanThompson\CustomerImport\Model;
  
 use Exception;
 use Generator;
@@ -13,7 +13,6 @@ class Customer
 {
   private $file;
   private $storeManagerInterface;
-  private $customerImport;
   private $output;
   protected $customerRepository;
  
@@ -116,12 +115,11 @@ class Customer
   }
   private function readJsonRows(string $file, array $header): ?Generator
   {
-     $data = [];
-     foreach ($rowData as $key => $value) {
-       $data[$key] = $value;
-     }
-     yield $data;
+    $data = [];
+    foreach ($rowData as $key => $value) {
+      $data[$key] = $value;
+    }
+    yield $data;
   }
  
- }
 }
