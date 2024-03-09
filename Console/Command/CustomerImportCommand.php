@@ -31,7 +31,8 @@ class CustomerImportCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Import customers from a CSV or JSON file')
+        $this->setName('customer:import')
+             ->setDescription('Import customers from a CSV or JSON file')
              ->setHelp('This command allows you to import customers from a CSV or JSON file')
              ->addArgument('profile', InputArgument::REQUIRED, 'Profile name')
              ->addArgument('source', InputArgument::REQUIRED, 'Source file');
