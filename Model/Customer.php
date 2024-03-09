@@ -8,22 +8,34 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Output\OutputInterface;
- 
+use Magento\Framework\App\State;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+
+
+
 class Customer
 {
   private $file;
   private $storeManagerInterface;
   private $output;
   protected $customerRepository;
+  protected $state;
+  protected $customerFactory;
+
  
   public function __construct(
     File $file,
     StoreManagerInterface $storeManagerInterface,
-    CustomerRepositoryInterface $customerRepository
+    CustomerInterfaceFactory $customerFactory,
+    CustomerRepositoryInterface $customerRepository,
+    State $state
   ) {
       $this->file = $file;
       $this->storeManagerInterface = $storeManagerInterface;
+      $this->customerFactory = $customerFactory;
       $this->customerRepository = $customerRepository;
+      $this->state = $state;
+
     }
 
   public function importCsv(string $filePath, OutputInterface $output): void
@@ -80,10 +92,11 @@ class Customer
   }
   private function createCustomer(array $data, int $websiteId, int $storeId): void
   {
-    $customer = $this->customerRepository->create();
+    $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
+    $customer = $this->customerFactory->create();
     $customer->setFirstname($data['fname']);
     $customer->setLastname($data['lname']);
-    $customer->setEmail($data['email']);
+    $customer->setEmail($data['emailaddress']);
     $customer->setWebsiteId($websiteId);
     $customer->setStoreId($storeId);
     $this->customerRepository->save($customer);
@@ -122,4 +135,6 @@ class Customer
     yield $data;
   }
  
-}
+ }
+
+
