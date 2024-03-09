@@ -6,7 +6,7 @@ use Exception;
 use Generator;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Store\Model\StoreManagerInterface;
-use Inchoo\CustomerCreation\Model\Import\CustomerImport;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Output\OutputInterface;
  
 class Customer
@@ -15,18 +15,19 @@ class Customer
   private $storeManagerInterface;
   private $customerImport;
   private $output;
+  protected $customerRepository;
  
   public function __construct(
     File $file,
     StoreManagerInterface $storeManagerInterface,
-    CustomerImport $customerImport
+    CustomerRepositoryInterface $customerRepository
   ) {
       $this->file = $file;
       $this->storeManagerInterface = $storeManagerInterface;
-      $this->customerImport = $customerImport;
+      $this->customerRepository = $customerRepository;
     }
 
-  public function install(string $fixture, OutputInterface $output): void
+  public function import(string $fixture, OutputInterface $output): void
   {
     $this->output = $output;
  
@@ -77,5 +78,14 @@ class Customer
     }
  
     fclose($handle);
+  }
+  private function createCustomer(array $data, int $websiteId, int $storeId): void
+  {
+    $customer = $this->customerRepository->create();
+    $customer->setFirstname($customerData[0]);
+    $customer->setLastname($customerData[1]);
+    $customer->setEmail($customerData[2]);
+    $this->customerRepository->save($customer);
+       
   }
 }
