@@ -27,7 +27,7 @@ class Customer
       $this->customerRepository = $customerRepository;
     }
 
-  public function import(string $fixture, OutputInterface $output): void
+  public function importCsv(string $filePath, OutputInterface $output): void
   {
     $this->output = $output;
  
@@ -37,10 +37,10 @@ class Customer
     $storeId = (int) $store->getId();
  
     // read the csv header
-    $header = $this->readCsvHeader($fixture)->current();
+    $header = $this->readCsvHeader($filePath)->current();
  
     // read the csv file and skip the first (header) row
-    $row = $this->readCsvRows($fixture, $header);
+    $row = $this->readCsvRows($filePath, $header);
     $row->next();
  
     // while the generator is open, read current row data, create a customer and resume the generator
@@ -90,4 +90,38 @@ class Customer
     $this->customerRepository->save($customer);
        
   }
+  public function importJson(string $filePath, OutputInterface $output): void
+  {
+    $this->output = $output;
+ 
+    // get store and website ID
+    $store = $this->storeManagerInterface->getStore();
+    $websiteId = (int) $this->storeManagerInterface->getWebsite()->getId();
+    $storeId = (int) $store->getId();
+
+    // read the json
+    if ($this->file->fileExists($filePath)) {
+      $jsonContent = $this->file->read($filePath);
+      $jsonData = json_decode($jsonContent, true);
+    }
+    // read the json file 
+    $row = $this->readJsonRows($jsonData);
+ 
+    // while the generator is open, read current row data, create a customer and resume the generator
+    while ($row->valid()) {
+        $data = $row->current();
+        $this->createCustomer($data, $websiteId, $storeId);
+        $row->next();
+    }
+  }
+  private function readJsonRows(string $file, array $header): ?Generator
+  {
+     $data = [];
+     foreach ($rowData as $key => $value) {
+       $data[$key] = $value;
+     }
+     yield $data;
+  }
+ 
+ }
 }
