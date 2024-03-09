@@ -48,9 +48,12 @@ class CustomerImportCommand extends Command
         try { 
             $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
             $fixture = $mediaDir->getAbsolutePath() . $source;
- 
-            $this->customer->import($fixture, $output);
- 
+            if ($profile == 'sample-csv'){
+                $this->customer->importCsv($fixture, $output);
+            } 
+            if ($profile == 'sample-json'){
+                $this->customer->importJson($fixture, $output);
+            }
             $output->writeln('<info>Customers imported successfully.</info>');
             return Command::SUCCESS;
         } catch (Exception $e) {
