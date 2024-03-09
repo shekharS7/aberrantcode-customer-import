@@ -1,6 +1,6 @@
 <?php
 
-namespace WoundermanThompson\CustomerImport\Console\Command;
+namespace WundermanThompson\CustomerImport\Console\Command;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -47,12 +47,12 @@ class CustomerImportCommand extends Command
         // Import customers using customer repository
         try { 
             $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-            $fixture = $mediaDir->getAbsolutePath() . $source;
+            $filepath = $mediaDir->getAbsolutePath() . $source;
             if ($profile == 'sample-csv'){
-                $this->customer->importCsv($fixture, $output);
+                $this->customer->importCsv($filepath, $output);
             } 
             if ($profile == 'sample-json'){
-                $this->customer->importJson($fixture, $output);
+                $this->customer->importJson($filepath, $output);
             }
             $output->writeln('<info>Customers imported successfully.</info>');
             return Command::SUCCESS;
