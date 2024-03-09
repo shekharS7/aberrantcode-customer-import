@@ -1,6 +1,6 @@
 <?php
 
-namespace Vendor\Module\Console\Command;
+namespace Wunderman\Thompson\Console\Command;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
