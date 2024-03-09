@@ -1,6 +1,6 @@
 {
-    "name": "wundermand-thompson/customer-import",
-    "description": "Description of your Magento module",
+    "name": "wunderman-thompson/customer-import",
+    "description": "This magento 2 module support importing Customer from CSV and Json file,
     "type": "magento2-module",
     "version": "1.0.0",
     "require": {
