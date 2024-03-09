@@ -1,6 +1,6 @@
 <?php
 
-namespace Wunderman\Thompson\Console\Command;
+namespace WoundermanThompson\CustomerImport\Console\Command;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -47,7 +47,7 @@ class CustomerImportCommand extends Command
         // Import customers using customer repository
         try { 
             $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-            $fixture = $mediaDir->getAbsolutePath() . 'fixtures/customers.csv';
+            $fixture = $mediaDir->getAbsolutePath() . $source;
  
             $this->customer->import($fixture, $output);
  
