@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use WundermanThompson\CustomerImport\Model\Customer;
 
@@ -47,7 +48,7 @@ class CustomerImportCommand extends Command
         // Extract customer data from the file
         // Import customers using customer repository
         try { 
-            $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+            $mediaDir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $filepath = $mediaDir->getAbsolutePath() . $source;
             if ($profile == 'sample-csv'){
                 $this->customer->importCsv($filepath, $output);
