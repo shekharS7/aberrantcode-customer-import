@@ -86,7 +86,7 @@ class Customer
     $customer->setLastname($data['lname']);
     $customer->setEmail($data['email']);
     $customer->setWebsiteId($websiteId);
-    $customer->setStoreId($storeId]);
+    $customer->setStoreId($storeId);
     $this->customerRepository->save($customer);
        
   }
