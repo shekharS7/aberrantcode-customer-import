@@ -82,9 +82,11 @@ class Customer
   private function createCustomer(array $data, int $websiteId, int $storeId): void
   {
     $customer = $this->customerRepository->create();
-    $customer->setFirstname($customerData[0]);
-    $customer->setLastname($customerData[1]);
-    $customer->setEmail($customerData[2]);
+    $customer->setFirstname($data['fname']);
+    $customer->setLastname($data['lname']);
+    $customer->setEmail($data['email']);
+    $customer->setWebsiteId($websiteId);
+    $customer->setStoreId($storeId]);
     $this->customerRepository->save($customer);
        
   }
