@@ -11,9 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Psr\Log\LoggerInterface;
+use WundermanThompson\CustomerImport\Api\CustomerImportInterface;
 
 
-class Customer
+
+class Customer implements CustomerImportInterface
 {
   private $file;
   private $storeManagerInterface;
@@ -117,6 +119,9 @@ class Customer
       $jsonContent = $this->file->read($filePath);
       $jsonData = json_decode($jsonContent, true);
     }
+
+    $this->logger->info(print_r($jsonData,true).'array print');
+
     // read current row data, create a customer
     foreach ($jsonData as $data) {
         $this->createCustomer($data, $websiteId, $storeId);
