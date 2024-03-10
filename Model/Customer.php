@@ -10,7 +10,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-
+use Psr\Log\LoggerInterface;
 
 
 class Customer
@@ -21,6 +21,7 @@ class Customer
   protected $customerRepository;
   protected $state;
   protected $customerFactory;
+  protected $logger;
 
  
   public function __construct(
@@ -28,14 +29,15 @@ class Customer
     StoreManagerInterface $storeManagerInterface,
     CustomerInterfaceFactory $customerFactory,
     CustomerRepositoryInterface $customerRepository,
-    State $state
+    State $state,
+    LoggerInterface $logger
   ) {
       $this->file = $file;
       $this->storeManagerInterface = $storeManagerInterface;
       $this->customerFactory = $customerFactory;
       $this->customerRepository = $customerRepository;
       $this->state = $state;
-
+      $this->logger = $logger;
     }
 
   public function importCsv(string $filePath, OutputInterface $output): void
@@ -92,7 +94,6 @@ class Customer
   }
   private function createCustomer(array $data, int $websiteId, int $storeId): void
   {
-    $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
     $customer = $this->customerFactory->create();
     $customer->setFirstname($data['fname']);
     $customer->setLastname($data['lname']);
@@ -116,25 +117,10 @@ class Customer
       $jsonContent = $this->file->read($filePath);
       $jsonData = json_decode($jsonContent, true);
     }
-    // read the json file 
-    $row = $this->readJsonRows($jsonData);
- 
-    // while the generator is open, read current row data, create a customer and resume the generator
-    while ($row->valid()) {
-        $data = $row->current();
+    // read current row data, create a customer
+    foreach ($jsonData as $data) {
         $this->createCustomer($data, $websiteId, $storeId);
-        $row->next();
     }
-  }
-  private function readJsonRows(string $file, array $header): ?Generator
-  {
-    $data = [];
-    foreach ($rowData as $key => $value) {
-      $data[$key] = $value;
-    }
-    yield $data;
   }
  
  }
-
-
