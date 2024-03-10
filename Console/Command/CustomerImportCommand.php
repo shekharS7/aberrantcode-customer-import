@@ -43,6 +43,20 @@ class CustomerImportCommand extends Command
     {
         $profile = $input->getArgument('profile');
         $source = $input->getArgument('source');
+        
+        // Use pathinfo() function to get file extension
+        $extension = pathinfo($source, PATHINFO_EXTENSION);
+
+        // Validate profile
+        if ($profile !=  'sample-csv' && $profile !=  'sample-json') {
+            $output->writeln('<error>Invalid profile value</error>');
+            return Command::FAILURE;
+        }
+         // Validate source
+        if ($extension !=  'csv' && $extension != 'json') {
+            $output->writeln('<error>Invalid source value</error>');
+            return Command::FAILURE;
+        }
 
         // Implement logic to parse the input file based on the profile
         // Extract customer data from the file
@@ -50,10 +64,10 @@ class CustomerImportCommand extends Command
         try { 
             $mediaDir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $filepath = $mediaDir->getAbsolutePath() . $source;
-            if ($profile == 'sample-csv'){
+            if ($profile == 'sample-csv' && $extension == 'csv'){
                 $this->customer->importCsv($filepath, $output);
             } 
-            if ($profile == 'sample-json'){
+            if ($profile == 'sample-json' && $extension == 'json'){
                 $this->customer->importJson($filepath, $output);
             }
             $output->writeln('<info>Customers imported successfully.</info>');
