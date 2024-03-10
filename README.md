@@ -5,6 +5,9 @@ Module is still not in a packages repository such as packagist.org, or packages.
       		"url": "https://github.com/shekharS7/customer-import-command"
     		}
  	}
+package is in a development stage, you will need to add the minimum-stability as well to the composer.json file:
+    "minimum-stability": "dev",
+
 
 # Install Magento 2 Customer Import module
     composer require wunderman-thompson/customer-import
