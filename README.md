@@ -16,3 +16,12 @@ package is in a development stage, you will need to add the minimum-stability as
     composer require wunderman-thompson/customer-import
     php bin/magento setup:upgrade
     php bin/magento setup:static-content:deploy
+
+Note : Keep CSV and JSON file inside pub/media folders for customer importing
+So to import from the CSV and the JSON respectively the user would execute
+either one of the following 
+
+```
+bin/magento customer:import sample-csv sample.csv
+bin/magento customer:import sample-json sample.json
+```
