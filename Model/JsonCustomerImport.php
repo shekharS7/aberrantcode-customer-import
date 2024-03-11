@@ -12,7 +12,6 @@ use Magento\Framework\App\State;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Psr\Log\LoggerInterface;
 use WundermanThompson\CustomerImport\Api\CustomerImportInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 
@@ -25,7 +24,6 @@ class JsonCustomerImport implements CustomerImportInterface
   protected $state;
   protected $customerFactory;
   protected $logger;
-  private $groupRepository;
   private $websiteRepository;
 
  
@@ -36,7 +34,6 @@ class JsonCustomerImport implements CustomerImportInterface
     CustomerRepositoryInterface $customerRepository,
     State $state,
     LoggerInterface $logger,
-    GroupRepositoryInterface $groupRepository,
     WebsiteRepositoryInterface $websiteRepository
   ) {
       $this->file = $file;
@@ -45,7 +42,6 @@ class JsonCustomerImport implements CustomerImportInterface
       $this->customerRepository = $customerRepository;
       $this->state = $state;
       $this->logger = $logger;
-      $this->groupRepository = $groupRepository;
       $this->websiteRepository = $websiteRepository;
     }
 
@@ -57,11 +53,7 @@ class JsonCustomerImport implements CustomerImportInterface
     $store = $this->storeManagerInterface->getStore();
     $websiteId = (int) $this->storeManagerInterface->getWebsite()->getId();
     $storeId = (int) $store->getId();
-    
-    // Assign general customer group
-    $generalCustomerGroupCode = 'General'; // Change this if the general customer group has a different code
-    $generalCustomerGroup = $this->groupRepository->get($generalCustomerGroupCode);
-    $generalCustomerGroupId = $generalCustomerGroup->getId();
+    $generalCustomerGroupId = 1;
 
      // Assign default website
      $defaultWebsiteCode = 'base'; // Change this if the default website has a different code
