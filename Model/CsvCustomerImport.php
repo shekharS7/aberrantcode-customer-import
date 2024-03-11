@@ -16,7 +16,7 @@ use Magento\Customer\Api\CustomerGroupManagementInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 
-class Customer implements CustomerImportInterface
+class CsvCustomerImport implements CustomerImportInterface
 {
   private $file;
   private $storeManagerInterface;
@@ -49,7 +49,7 @@ class Customer implements CustomerImportInterface
       $this->websiteRepository = $websiteRepository;
     }
 
-  public function importCs(string $filePath, OutputInterface $output): void
+  public function import(string $filePath, OutputInterface $output): void
   {
     $this->output = $output;
  
@@ -121,27 +121,4 @@ class Customer implements CustomerImportInterface
     $this->customerRepository->save($customer);
        
   }
-  public function importJson(string $filePath, OutputInterface $output): void
-  {
-    $this->output = $output;
- 
-    // get store and website ID
-    $store = $this->storeManagerInterface->getStore();
-    $websiteId = (int) $this->storeManagerInterface->getWebsite()->getId();
-    $storeId = (int) $store->getId();
-
-    // read the json
-    if ($this->file->fileExists($filePath)) {
-      $jsonContent = $this->file->read($filePath);
-      $jsonData = json_decode($jsonContent, true);
-    }
-
-    $this->logger->info(print_r($jsonData,true).'array print');
-
-    // read current row data, create a customer
-    foreach ($jsonData as $data) {
-        $this->createCustomer($data, $websiteId, $storeId);
-    }
-  }
- 
  }
