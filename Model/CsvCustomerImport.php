@@ -58,7 +58,7 @@ class CsvCustomerImport implements CustomerImportInterface
     $storeId = (int) $store->getId();
     // Assign general customer group
     $generalCustomerGroupCode = 'General'; // Change this if the general customer group has a different code
-    $generalCustomerGroup = $this->groupRepository->getGroup($generalCustomerGroupCode);
+    $generalCustomerGroup = $this->groupRepository->get($generalCustomerGroupCode);
     $generalCustomerGroupId = $generalCustomerGroup->getId();
 
      // Assign default website
