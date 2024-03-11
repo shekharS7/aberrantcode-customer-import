@@ -9,7 +9,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use WundermanThompson\CustomerImport\Model\Customer;
+use WundermanThompson\CustomerImport\Model\CsvCustomerImport;
+use WundermanThompson\CustomerImport\Model\JsonCustomerImport;
 
 
 class CustomerImportCommand extends Command
@@ -18,16 +19,20 @@ class CustomerImportCommand extends Command
 
     protected $customerRepository;
     private $filesystem;
-    private $customer;
+    private $csvCustomer;
+    private $jsonCustomer;
+    
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         Filesystem $filesystem,
-        Customer $customer
+        CsvCustomerImport $csvCustomer,
+        JsonCustomerImport $jsonCustomer
     ) {
         parent::__construct();
         $this->customerRepository = $customerRepository;
         $this->filesystem = $filesystem;
-        $this->customer = $customer;
+        $this->csvCustomer = $csvCustomer;
+        $this->jsonCustomer = $jsonCustomer;
     }
 
     protected function configure()
@@ -65,12 +70,15 @@ class CustomerImportCommand extends Command
             $mediaDir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $filepath = $mediaDir->getAbsolutePath() . $source;
             if ($profile == 'sample-csv' && $extension == 'csv'){
-                $this->customer->importCsv($filepath, $output);
+                $this->csvCustomer->import($filepath, $output);
+                $output->writeln('<info>Customers imported successfully.</info>');
+                return Command::SUCCESS;
             } 
             if ($profile == 'sample-json' && $extension == 'json'){
-                $this->customer->importJson($filepath, $output);
+                $this->jsonCustomer->import($filepath, $output);
+                $output->writeln('<info>Customers imported successfully.</info>');
+                return Command::SUCCESS;
             }
-            $output->writeln('<info>Customers imported successfully.</info>');
             return Command::SUCCESS;
         } catch (Exception $e) {
             $msg = $e->getMessage();
