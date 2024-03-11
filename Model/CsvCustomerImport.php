@@ -49,7 +49,7 @@ class Customer implements CustomerImportInterface
       $this->websiteRepository = $websiteRepository;
     }
 
-  public function importCsv(string $filePath, OutputInterface $output): void
+  public function importCs(string $filePath, OutputInterface $output): void
   {
     $this->output = $output;
  
