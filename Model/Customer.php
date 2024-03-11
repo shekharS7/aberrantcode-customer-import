@@ -12,7 +12,8 @@ use Magento\Framework\App\State;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Psr\Log\LoggerInterface;
 use WundermanThompson\CustomerImport\Api\CustomerImportInterface;
-
+use Magento\Customer\Api\CustomerGroupManagementInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 
 
 class Customer implements CustomerImportInterface
@@ -24,6 +25,8 @@ class Customer implements CustomerImportInterface
   protected $state;
   protected $customerFactory;
   protected $logger;
+  private $customerGroupManagement;
+  private $websiteRepository;
 
  
   public function __construct(
@@ -32,7 +35,9 @@ class Customer implements CustomerImportInterface
     CustomerInterfaceFactory $customerFactory,
     CustomerRepositoryInterface $customerRepository,
     State $state,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    CustomerGroupManagementInterface $customerGroupManagement,
+    WebsiteRepositoryInterface $websiteRepository
   ) {
       $this->file = $file;
       $this->storeManagerInterface = $storeManagerInterface;
@@ -40,16 +45,26 @@ class Customer implements CustomerImportInterface
       $this->customerRepository = $customerRepository;
       $this->state = $state;
       $this->logger = $logger;
+      $this->customerGroupManagement = $customerGroupManagement;
+      $this->websiteRepository = $websiteRepository;
     }
 
   public function importCsv(string $filePath, OutputInterface $output): void
   {
     $this->output = $output;
  
-    // get store and website ID
+    // get store 
     $store = $this->storeManagerInterface->getStore();
-    $websiteId = (int) $this->storeManagerInterface->getWebsite()->getId();
     $storeId = (int) $store->getId();
+    // Assign general customer group
+    $generalCustomerGroupCode = 'General'; // Change this if the general customer group has a different code
+    $generalCustomerGroup = $this->customerGroupManagement->getGroup($generalCustomerGroupCode);
+    $generalCustomerGroupId = $generalCustomerGroup->getId();
+
+     // Assign default website
+     $defaultWebsiteCode = 'base'; // Change this if the default website has a different code
+     $defaultWebsite = $this->websiteRepository->get($defaultWebsiteCode);
+     $defaultWebsiteId = $defaultWebsite->getId();
  
     // read the csv header
     $header = $this->readCsvHeader($filePath)->current();
@@ -61,7 +76,7 @@ class Customer implements CustomerImportInterface
     // while the generator is open, read current row data, create a customer and resume the generator
     while ($row->valid()) {
         $data = $row->current();
-        $this->createCustomer($data, $websiteId, $storeId);
+        $this->createCustomer($data, $defaultWebsiteId, $storeId, $generalCustomerGroupId);
         $row->next();
     }
   }
@@ -94,14 +109,15 @@ class Customer implements CustomerImportInterface
  
     fclose($handle);
   }
-  private function createCustomer(array $data, int $websiteId, int $storeId): void
+  private function createCustomer(array $data, int $defaultWebsiteId, int $storeId, int $generalCustomerGroupId): void
   {
     $customer = $this->customerFactory->create();
     $customer->setFirstname($data['fname']);
     $customer->setLastname($data['lname']);
     $customer->setEmail($data['emailaddress']);
-    $customer->setWebsiteId($websiteId);
+    $customer->setWebsiteId($defaultWebsiteId);
     $customer->setStoreId($storeId);
+    $customer->setGroupId($generalCustomerGroupId);
     $this->customerRepository->save($customer);
        
   }
