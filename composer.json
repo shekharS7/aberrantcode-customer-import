@@ -3,6 +3,10 @@
     "description": "This magento 2 module support importing customer from csv and json file",
     "type": "magento2-module",
     "version": "1.0.0",
+    "license": [
+    "OSL-3.0",
+    "MIT"
+  ],
     "require": {
         "php": "~8.1.0||~8.2.0"
     },
