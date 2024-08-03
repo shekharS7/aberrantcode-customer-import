@@ -1,6 +1,14 @@
 <?php
- 
-namespace WundermanThompson\CustomerImport\Model;
+/**
+ * Copyright © Shekhar Suman, 2024. All rights reserved.
+ * See COPYING.txt for license details.
+ * 
+ * @package     AberrantCode_CustomerImport
+ * @version     1.0.0
+ * @license     MIT License (http://opensource.org/licenses/MIT)
+ * @autor       Shekhar Suman
+ */
+namespace AberrantCode\CustomerImport\Model;
  
 use Exception;
 use Generator;
@@ -11,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Psr\Log\LoggerInterface;
-use WundermanThompson\CustomerImport\Api\CustomerImportInterface;
+use AberrantCode\CustomerImport\Api\CustomerImportInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 
