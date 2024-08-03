@@ -1,16 +1,24 @@
 <?php
-
-namespace WundermanThompson\CustomerImport\Test\Unit\Console\Command;
+/**
+ * Copyright © Shekhar Suman, 2024. All rights reserved.
+ * See COPYING.txt for license details.
+ * 
+ * @package     AberrantCode_CustomerImport
+ * @version     1.0.0
+ * @license     MIT License (http://opensource.org/licenses/MIT)
+ * @autor       Shekhar Suman
+ */
+namespace AberrantCode\CustomerImport\Test\Unit\Console\Command;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use WundermanThompson\CustomerImport\Console\Command\CustomerImportCommand;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Filesystem;
-use WundermanThompson\CustomerImport\Model\Customer;
 use Magento\Framework\Filesystem\DirectoryList;
 use Symfony\Component\Console\Output\OutputInterface;
+use AberrantCode\CustomerImport\Model\Customer;
+use AberrantCode\CustomerImport\Console\Command\CustomerImportCommand;
 
 class CustomerImportCommandTest extends TestCase
 {
