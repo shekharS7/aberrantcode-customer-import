@@ -1,10 +1,21 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Shekhar Suman, 2024. All rights reserved.
+ * See COPYING.txt for license details.
+ * 
+ * @package     AberrantCode_CustomerImport
+ * @version     1.0.0
+ * @license     MIT License (http://opensource.org/licenses/MIT)
+ * @autor       Shekhar Suman
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
    <type name="Magento\Framework\Console\CommandList">
        <arguments>
            <argument name="commands" xsi:type="array">
-               <item name="CustomerImport" xsi:type="object">WundermanThompson\CustomerImport\Console\Command\CustomerImportCommand</item>
+               <item name="CustomerImport" xsi:type="object">AberrantCode\CustomerImport\Console\Command\CustomerImportCommand</item>
            </argument>
        </arguments>
    </type>
